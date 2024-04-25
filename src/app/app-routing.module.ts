@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'auth',
     pathMatch: 'full'
   },
+  {
+    path: 'main',
+    loadChildren: () => import('./pages/main/main.module').then( m => m.MainPageModule)
+  },
   
 ];
 
