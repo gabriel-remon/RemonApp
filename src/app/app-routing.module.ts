@@ -10,15 +10,15 @@ const routes: Routes = [
     canActivate:[noAuthGuard]
   },
   {
-    path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full'
-  },
-  {
     path: 'main',
     loadChildren: () => import('./pages/main/main.module').then( m => m.MainPageModule),
     canActivate:[authGuard]
   },
+  {
+    path: 'splash',
+    loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
+  },
+
   
 ];
 
