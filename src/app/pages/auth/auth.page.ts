@@ -25,7 +25,9 @@ export class AuthPage implements OnInit {
       await loading.present();
 
       this.firebaseSvc.login(this.form.value as user).then(res=>{
-        console.log(res)
+        
+        this.getUserInfo(res.user.uid)
+
       }).catch(err=>{
         console.log(err);
 
@@ -41,6 +43,59 @@ export class AuthPage implements OnInit {
       })
     }
 
+  }
+
+
+  async getUserInfo(uid: string) {
+    if (this.form.valid) {
+      const loading = await this.utilsSvc.loading()
+      await loading.present();
+
+      let path = `users/${uid}`
+     
+      this.firebaseSvc.getDocument(path).then((res:user)  => {
+
+        this.utilsSvc.saveInLocalStorage("user", res)
+        this.utilsSvc.routetLink("/main/home")
+        this.form.reset();
+
+        this.utilsSvc.presentToast({
+          message: `te damos la bienvenida ${res?.name}`,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle',
+          icon: 'person-circle-outline'
+        })
+
+      }).catch(err => {
+        console.log(err);
+
+        this.utilsSvc.presentToast({
+          message: err.message,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle',
+          icon: 'alert-circle-outline'
+        })
+      }).finally(() => {
+        loading.dismiss()
+      })
+    }
+
+  }
+
+
+  acceso1(){
+    this.form.controls['email'].setValue("adminjuan@gmail.com")
+    this.form.controls['password'].setValue("admin1")
+  }
+  acceso2(){
+    this.form.controls['email'].setValue("adminpepe@gmail.com")
+    this.form.controls['password'].setValue("admin2")
+  }
+  acceso3(){
+    this.form.controls['email'].setValue("adminluis@gmail.com")
+    this.form.controls['password'].setValue("admin3")
   }
 
   ngOnInit() {
